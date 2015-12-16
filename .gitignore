@@ -3,6 +3,9 @@
 *.lo
 *.o
 *.obj
+*.dep
+*.res
+*.resources
 
 # Precompiled Headers
 *.gch
@@ -26,3 +29,20 @@
 *.exe
 *.out
 *.app
+
+# Other
+*.vcxproj
+*.vcxproj.*
+*.tlog
+*.suo
+*.ipch
+*.manifest
+*.sdf
+*.log
+*.rc
+*.idb
+*.pdb
+*.lastbuildstate
+*.unsuccessfulbuild
+*.opensdf
+*.cache
