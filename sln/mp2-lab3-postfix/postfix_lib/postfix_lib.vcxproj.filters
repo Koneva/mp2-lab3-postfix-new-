@@ -20,7 +20,7 @@
     <ClInclude Include="..\..\..\include\postfix.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stack.hpp">
+    <ClInclude Include="..\..\..\include\stack.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -31,7 +31,7 @@
     <ClCompile Include="..\..\..\src\postfix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stack.cpp">
+    <ClCompile Include="..\..\..\src\stack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

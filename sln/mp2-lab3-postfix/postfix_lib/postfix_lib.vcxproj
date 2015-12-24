@@ -82,12 +82,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\list.hpp" />
     <ClInclude Include="..\..\..\include\postfix.hpp" />
-    <ClInclude Include="stack.hpp" />
+    <ClInclude Include="..\..\..\include\stack.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\list.cpp" />
     <ClCompile Include="..\..\..\src\postfix.cpp" />
-    <ClCompile Include="stack.cpp" />
+    <ClCompile Include="..\..\..\src\stack.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
