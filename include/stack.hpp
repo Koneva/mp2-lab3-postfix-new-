@@ -1,6 +1,8 @@
 #pragma once 
 
 #include "list.hpp"
+#include  <iostream>
+#include <cstdlib> 
 
 template <class ValType>
 class Stack
@@ -17,6 +19,7 @@ public:
 	void Push(ValType);
 	ValType Pop();
 	ValType GetValue();
+	void Print() const;
 };
 
 //конструктор
@@ -80,7 +83,7 @@ ValType Stack<ValType>::Pop()
 	if(IsEmpty())
 		throw ("Stack is empty");
 	ValType tmp = list -> GetFirst() -> key;
-	List -> Remove(tmp);
+	list -> Remove(tmp);
 	return tmp;
 }
 
@@ -91,4 +94,13 @@ ValType Stack<ValType>::GetValue()
 	if(IsEmpty())
 		throw ("Stack is empty");
 	return list -> GetFirst() -> key;
+}
+
+//печать стека
+template<class ValType>
+void Stack<ValType>::Print() const
+{
+	Stack<ValType>* stack = new Stack<ValType>(*this);
+	while (!(stack -> IsEmpty()))
+		cout << stack -> Pop() << endl ;
 }

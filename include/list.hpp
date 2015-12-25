@@ -78,8 +78,8 @@ void List<ValType>::PushEnd(ValType key)
 		PushStart(key);
 		return;
 	}
-	while (First -> Next != 0)
-		First = First -> Next;
+	while (node -> Next != 0)
+		node = node -> Next;
 	node -> Next = new Node<ValType>;
 	node = node -> Next;
 	node -> key = key;
