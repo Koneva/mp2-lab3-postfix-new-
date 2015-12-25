@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <cstdlib>
 
 template<class ValType>
 class Node
@@ -27,6 +28,7 @@ public:
 	Node<ValType>* Search(ValType key); 
 	Node<ValType>* GetFirst()const;
 	void Remove(ValType key);
+	void Print()const;
 };
 
 //конструктор
@@ -62,7 +64,7 @@ void List<ValType>::PushStart(ValType key)
 {
 	Node<ValType>* node = new Node<ValType>();
 	node -> key = key;
-	node -> next = First;
+	node -> Next = First;
 	First = node;
 }
 
@@ -88,14 +90,14 @@ void List<ValType>::PushEnd(ValType key)
 template<class ValType>
 void List<ValType>::PushAfter(ValType key, Node<ValType> *elem)
 {
-	Node<ValType>* node = search(key);
+	Node<ValType>* node = Search(key);
 	if(node -> Next != 0)
 	{
 		elem -> Next = node -> Next;
 		node -> Next = elem;
 	}
 	else
-		PushEnd(push_key);
+		PushEnd(elem -> key);
 }
 
 //вставка до элемента
@@ -105,12 +107,12 @@ void List<ValType>::PushBefore(ValType key, Node<ValType> *elem)
 	Node<ValType>* node = First;
 	Node<ValType>* node_next  = node -> Next;
 
-	while ((node_next -> next != 0) && (node-_next -> key != key))
+	while ((node_next -> Next != 0) && (node_next -> key != key))
 	{
 		node = node_next;
 		node_next = node_next -> Next;
 	}
-	if((node_next -> next == 0) && (node_next -> key != key))
+	if((node_next -> Next == 0) && (node_next -> key != key))
 		throw ("This element isn't found");
 	elem -> Next = node_next;
 	node -> Next = elem;
@@ -144,4 +146,16 @@ void List<ValType>::Remove(ValType key)
 	if(First == 0)
 		throw ("List is empty");
 	First = First -> Next;
+}
+
+template<class ValType>
+void List<ValType>::Print()const
+{
+	Node<ValType>* first = First;
+	while (first != 0)
+	{
+		cout << first -> key << " ";
+		first = first -> Next;
+	}
+	cout << endl << endl ;
 }
