@@ -6,6 +6,8 @@
 
 using namespace std;
 
+typedef float ResType;
+
 template<class ValType> 
 class Postfix
 {
@@ -15,10 +17,12 @@ private:
 
 	int IsOperator(char) const;
 	int IsArgument(char) const;
-	char* PostfixString(char*);
 public:
 	Postfix();
 	~Postfix();
+
+	char* PostfixString(char*);
+	ResType Calculator(char*);
 };
 
 template<class ValType>
@@ -128,4 +132,11 @@ char* Postfix<ValType>::PostfixString(char *str)
 		string_result.PushStart(0, tmp);
 	}
 	return string_result;
+}
+
+template<class ValType>
+ResType Postfix<ValType>::Calculator(char* str)
+{
+	ResType res;
+	return res;
 }
