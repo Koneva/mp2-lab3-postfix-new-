@@ -22,7 +22,7 @@ public:
 	~Postfix();
 
 	char* PostfixString(char*);
-	ResType Calculator(char*);
+	ResType Calculator(char*,map<char, ResType>);
 };
 
 template<class ValType>
@@ -135,8 +135,68 @@ char* Postfix<ValType>::PostfixString(char *str)
 }
 
 template<class ValType>
-ResType Postfix<ValType>::Calculator(char* str)
+ResType Postfix<ValType>::Calculator(char* str, map<char, ResType> priority)
 {
-	ResType res;
+	if(str == "")
+		throw
+		exception ("String is empty");
+
+	Stack<ResType> result;
+	ResType LeftOperand;
+	ResType RightOperand;
+	char value;
+	
+	for (int i = 0; i < str.length(); i++)
+	{
+		value = str[i];
+
+		if (str[str.length() - 1] == '=')
+			priority[str[0]] = 0;
+		if (IsArgument(value))
+		{
+			if(!priority.count(value))
+			{
+				cout << '\t' << value << " = " << endl ;
+				cin >> priority[values];
+			}
+			result.Push(priority[value]);
+		}
+
+		if (resut.IsEmpty())
+			throw
+			exception ("Error");
+
+		RightOperand = resalt.Pop();
+		if((result.IsEmpty) && (value == '-'))
+		{
+			resalt.Push(-RightOperand);
+		}
+	
+		if (resut.IsEmpty())
+			throw
+			exception ("Error");
+
+		LeftOperand = result.Pop();
+		switch (value) 
+		{
+		case '+':
+			result.Push(LeftOperand + RightOperand);
+			break;
+		case '-':
+			result.Push(LeftOperand - RightOperand);
+			break;
+		case '*':
+			result.Push(LeftOperand * RightOperand);
+			break;
+		case '/':
+			result.Push(LeftOperand / RightOperand);
+			break;
+		}
+	}
+
+	ResType res = result.Pop();
+	if(!result.IsEmpty())
+		throw 
+		exception ("Error");
 	return res;
 }
