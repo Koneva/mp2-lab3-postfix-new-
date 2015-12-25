@@ -1,10 +1,12 @@
+#pragma once 
+
 #include "stack.hpp"
 #include <map>
 #include <string.h>
 
 using namespace std;
 
-template<ValType> 
+template<class ValType> 
 class Postfix
 {
 private:
@@ -13,17 +15,17 @@ private:
 
 	int IsOperator(char) const;
 	int IsArgument(char) const;
-	char* Postfix(char);
+	char* PostfixString(char*);
 public:
-	Postfix()
+	Postfix();
 	~Postfix();
 };
 
 template<class ValType>
 Postfix<ValType>::Postfix()
 {
-	operators = new Stack<ValType>();
-	arguments = new Srack<ValType>();
+//	operators = new Stack<ValType>();
+//	arguments = new Srack<ValType>();
 }
 
 template<class ValType>
@@ -33,7 +35,7 @@ Postfix<ValType>::~Postfix()
 	delete arguments;
 }
 
-template<ValType>
+template<class ValType>
 int Postfix<ValType>::IsOperator(char value) const
 {
 	switch (value)
@@ -57,16 +59,16 @@ int Postfix<ValType>::IsOperator(char value) const
 	}
 }
 
-template<ValType>
-int Postfix<ValType>::IsArgument(char value)
+template<class ValType>
+int Postfix<ValType>::IsArgument(char value) const
 {
 	if((IsOperator) || (value == ' '))
 		return 0;
 	return 1;
 }
 
-template<ValType>
-char* Postfix<ValType>::Postfix(char *str)
+template<class ValType>
+char* Postfix<ValType>::PostfixString(char *str)
 {
 	map <char, int> priority;
 	priority ['*'] = 3;
@@ -106,7 +108,7 @@ char* Postfix<ValType>::Postfix(char *str)
 			continue;
 			if ((!operators.IsEmpty()) && (priority[value] > priority[operators.GetValue()]))
 				operators.Push(values);
-			if (value == '('))
+			if (value == '(')
 				operators.Push(values);
 		}
 	}

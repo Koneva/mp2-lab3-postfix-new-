@@ -6,8 +6,15 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "postfix_lib", "postfix_lib\postfix_lib.vcxproj", "{8056A0ED-3977-42B6-B2C1-DE3213D58B4B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample", "sample\sample.vcxproj", "{FF2ECFAC-3F86-4D33-941A-B5B4B556CD88}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8056A0ED-3977-42B6-B2C1-DE3213D58B4B} = {8056A0ED-3977-42B6-B2C1-DE3213D58B4B}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "postfix_test", "postfix_test\postfix_test.vcxproj", "{5CEC08C6-A145-462C-B7EC-F7DBFE4F90C8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C5765854-24B0-4177-86E0-0E8444DC284C} = {C5765854-24B0-4177-86E0-0E8444DC284C}
+		{8056A0ED-3977-42B6-B2C1-DE3213D58B4B} = {8056A0ED-3977-42B6-B2C1-DE3213D58B4B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
