@@ -112,8 +112,11 @@ string Postfix<ValType>::PostfixString(string str)
 				if(!operators.IsEmpty())
 				{
 					if (priority[value] <= priority[operators.GetValue()])
+					{
 						while ((!operators.IsEmpty()) && (priority[value] <= priority[operators.GetValue()]))
 							arguments.Push(operators.Pop());
+						operators.Push(value);
+					}
 					else
 						operators.Push(value);
 				}
@@ -202,68 +205,5 @@ ResType Postfix<ValType>::Calculator(string str)
 		throw 
 		exception ("Error : Incorrect expression.");
 
-	/*if(str == "")
-		throw
-		exception ("String is empty");
-
-	Stack<ResType> result;
-	ResType LeftOperand;
-	ResType RightOperand;
-	char elem;
-
-	map<char, ResType> value;
-	
-	for (int i = 0; i < str.length(); i++)
-	{
-		elem = str[i];
-
-		if (str[str.length() - 1] == '=')
-			value[str[0]] = 0;
-		if (IsArgument(elem))
-		{
-			if(!value.count(elem))
-			{
-				cout <<  elem << " = " ;
-				cin >> value[elem];
-			}
-			result.Push(value[elem]);
-			continue;
-		}
-		if (result.IsEmpty())
-			throw
-			exception ("Error");
-
-		LeftOperand = result.Pop();
-		if((result.IsEmpty()) && (elem == '-'))
-		{
-			result.Push(-RightOperand);
-		//}
-	
-		if (result.IsEmpty())
-			throw
-			exception ("Error1");
-
-		LeftOperand = result.Pop();
-		switch (elem) 
-		{
-		case '+':
-			result.Push(LeftOperand + RightOperand);
-			break;
-		case '-':
-			result.Push(LeftOperand - RightOperand);
-			break;
-		case '*':
-			result.Push(LeftOperand * RightOperand);
-			break;
-		case '/':
-			result.Push(LeftOperand / RightOperand);
-			break;
-		}
-	}
-
-	ResType res = result.Pop();
-	if(!result.IsEmpty())
-		throw 
-		exception ("Error2");*/
 	return res;
 }
