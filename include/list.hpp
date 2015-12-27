@@ -1,6 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 template<class ValType>
 class Node
@@ -17,7 +20,7 @@ private:
 	Node<ValType>* First;
 public:
 	List();
-	List(const List<ValType>*);
+	List(const List<ValType>&);
 	~List();
 
 	void PushStart(ValType key);
@@ -27,6 +30,10 @@ public:
 	Node<ValType>* Search(ValType key); 
 	Node<ValType>* GetFirst()const;
 	void Remove(ValType key);
+	void Print()const;
+
+	int operator==(const List list)const;
+    int operator!=(const List list)const;
 };
 
 //конструктор
@@ -38,14 +45,14 @@ List<ValType>::List()
 
 //конструктор копирования
 template<class ValType>
-List<ValType>::List(const List<ValType> *list)
+List<ValType>::List(const List<ValType> &list)
 {
 	First = 0;
 	Node<ValType>* first = list.First;
 	while (first != 0)
 	{
 		PushEnd(first -> key);
-		first = first -> next;
+		first = first -> Next;
 	}
 }
 
@@ -62,7 +69,7 @@ void List<ValType>::PushStart(ValType key)
 {
 	Node<ValType>* node = new Node<ValType>();
 	node -> key = key;
-	node -> next = First;
+	node -> Next = First;
 	First = node;
 }
 
@@ -76,8 +83,8 @@ void List<ValType>::PushEnd(ValType key)
 		PushStart(key);
 		return;
 	}
-	while (First -> Next != 0)
-		First = First -> Next;
+	while (node -> Next != 0)
+		node = node -> Next;
 	node -> Next = new Node<ValType>;
 	node = node -> Next;
 	node -> key = key;
@@ -88,14 +95,14 @@ void List<ValType>::PushEnd(ValType key)
 template<class ValType>
 void List<ValType>::PushAfter(ValType key, Node<ValType> *elem)
 {
-	Node<ValType>* node = search(key);
+	Node<ValType>* node = Search(key);
 	if(node -> Next != 0)
 	{
 		elem -> Next = node -> Next;
 		node -> Next = elem;
 	}
 	else
-		PushEnd(push_key);
+		PushEnd(elem -> key);
 }
 
 //вставка до элемента
@@ -105,12 +112,12 @@ void List<ValType>::PushBefore(ValType key, Node<ValType> *elem)
 	Node<ValType>* node = First;
 	Node<ValType>* node_next  = node -> Next;
 
-	while ((node_next -> next != 0) && (node-_next -> key != key))
+	while ((node_next -> Next != 0) && (node_next -> key != key))
 	{
 		node = node_next;
 		node_next = node_next -> Next;
 	}
-	if((node_next -> next == 0) && (node_next -> key != key))
+	if((node_next -> Next == 0) && (node_next -> key != key))
 		throw ("This element isn't found");
 	elem -> Next = node_next;
 	node -> Next = elem;
@@ -143,5 +150,53 @@ void List<ValType>::Remove(ValType key)
 {
 	if(First == 0)
 		throw ("List is empty");
-	First = First -> Next;
+
+    Node<ValType>* node =  Search(key);
+
+	if (First -> key == key) {
+        First = First -> Next;
+        return;
+    }
+
+    Node<ValType>* first = First;
+    while (first -> Next != node)
+        first = first -> Next;
+    first -> Next = node-> Next;
+    delete node;
+}
+
+template<class ValType>
+void List<ValType>::Print()const
+{
+	Node<ValType>* first = First;
+	while (first != 0)
+	{
+		cout << first -> key << " ";
+		first = first -> Next;
+	}
+	cout << endl << endl ;
+}
+
+template <class ValType>
+int List<ValType>::operator==(const List list)const
+{
+    Node<ValType>* first1 = First;
+    Node<ValType>* first2 = list.First;
+    while ((first1 != 0) && (first2 != 0))
+	{
+        if(first1 -> key != first2 -> key)
+            return 0;
+        first1 = first1 -> Next;
+        first2 = first2 -> Next;
+    }
+
+    if (first1 != first2)
+        return 0;
+    return 1;
+}
+
+template <class ValType>
+int List<ValType>::operator!=(const List list)const
+{
+    return !(*this == list);
 }
