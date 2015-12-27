@@ -11,7 +11,7 @@ private:
 	List<ValType>* list;
 public:
 	Stack();
-	Stack(const Stack<ValType>*);
+	Stack(const Stack<ValType>&);
 	~Stack();
 
 	int IsFull() const;
@@ -31,9 +31,9 @@ Stack<ValType>::Stack()
 
 //конструктор копирования
 template<class ValType>
-Stack<ValType>::Stack(const Stack<ValType>* stack)
+Stack<ValType>::Stack(const Stack<ValType>& stack)
 {
-	list = new List<ValType>(stack -> list);
+	list = new List<ValType>(*stack.list);
 }
 
 //деструктор
@@ -81,7 +81,8 @@ template<class ValType>
 ValType Stack<ValType>::Pop()
 {
 	if(IsEmpty())
-		throw ("Stack is empty");
+		throw 
+		("Stack is empty");
 	ValType tmp = list -> GetFirst() -> key;
 	list -> Remove(tmp);
 	return tmp;
@@ -92,7 +93,8 @@ template<class ValType>
 ValType Stack<ValType>::GetValue()
 {
 	if(IsEmpty())
-		throw ("Stack is empty");
+		throw 
+		exception ("Stack is empty");
 	return list -> GetFirst() -> key;
 }
 

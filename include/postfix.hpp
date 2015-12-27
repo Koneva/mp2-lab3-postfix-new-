@@ -2,7 +2,7 @@
 
 #include "stack.hpp"
 #include <map>
-#include <string.h>
+#include <string>
 
 using namespace std;
 
@@ -21,8 +21,8 @@ public:
 	Postfix();
 	~Postfix();
 
-	char* PostfixString(char*);
-	ResType Calculator(char*,map<char, ResType>);
+	string PostfixString(string);
+	ResType Calculator(string);
 };
 
 template<class ValType>
@@ -35,8 +35,8 @@ Postfix<ValType>::Postfix()
 template<class ValType>
 Postfix<ValType>::~Postfix()
 {
-	delete operators;
-	delete arguments;
+	//delete operators;
+	//delete arguments;
 }
 
 template<class ValType>
@@ -66,13 +66,13 @@ int Postfix<ValType>::IsOperator(char value) const
 template<class ValType>
 int Postfix<ValType>::IsArgument(char value) const
 {
-	if((IsOperator) || (value == ' '))
+	if((IsOperator(value)) || (value == ' '))
 		return 0;
 	return 1;
 }
 
 template<class ValType>
-char* Postfix<ValType>::PostfixString(char *str)
+string Postfix<ValType>::PostfixString(string str)
 {
 	map <char, int> priority;
 	priority ['*'] = 3;
@@ -80,104 +80,171 @@ char* Postfix<ValType>::PostfixString(char *str)
 	priority ['+'] = 2;
 	priority ['-'] = 2;
 	priority ['('] = 1;
+	priority [')'] = 1;
 	priority ['='] = 0;
 
 	char value;
 
-	for (int i = 0; i < str.length(); i++)
+	for(int i = 0; i < str.length(); i++)
 	{
 		value = str[i];
-		
-		if(IsArgument(values))
+
+		if (value == ' ')
+			continue;
+
+		if (IsOperator(value))
 		{
-			if(value == ')')
+			if (priority[value] == 1)
 			{
-				while ((!operators.IsEmpty()) && (operators.GetValue() != '('))
-					arguments.Push(operators.Pop());
-				if (operators.IsEmpty())
-					throw ("Error : the brakets are not closed");
-				operators.Pop();
-				continue;
+				if (value == ')')
+				{
+					while ((!operators.IsEmpty()) && (operators.GetValue() != '('))
+						arguments.Push(operators.Pop());					
+					operators.Pop();
+				}
+				else
+				{
+					operators.Push(value);
+					continue;
+				}
 			}
 			else
-				arguments.Push(values);
+				if(!operators.IsEmpty())
+				{
+					if (priority[value] <= priority[operators.GetValue()])
+						while ((!operators.IsEmpty()) && (priority[value] <= priority[operators.GetValue()]))
+							arguments.Push(operators.Pop());
+					else
+						operators.Push(value);
+				}
+				else
+					operators.Push(value);
 		}
-		
-		if(IsOperator(values)) 
-		{
-			if ((!operators.IsEmpty()) && (priority[value] <= priority[operators.GetValue()]) && (value != '('))
-				while ((!operators.IsEmpty()) && (priority[value] <= priority[operators.GetValue()]))
-					arguments.Push(operators.Pop());	
-			operators.Push(value);
-			continue;
-			if ((!operators.IsEmpty()) && (priority[value] > priority[operators.GetValue()]))
-				operators.Push(values);
-			if (value == '(')
-				operators.Push(values);
-		}
+		else
+			arguments.Push(value);
 	}
 
-	if (operators.GetValue() == '(')
-		throw ("Error : the brakets are not closed");
+	if (!operators.IsEmpty())
+		while (!operators.IsEmpty())
+			arguments.Push(operators.Pop());
 
 	if (arguments.IsEmpty())
-		throw ("Error : no data");
-	
-	char *string_result;
-	char *tmp;
+		throw ("Error : No data.");
 
-	while(!argument.IsEmpty()) 
-	{
-		tmp = argument.Pop();
-		string_result.PushStart(0, tmp);
-	}
+	while (!arguments.IsEmpty())
+		operators.Push(arguments.Pop());
+
+	string string_result = "";
+
+	while (!operators.IsEmpty())
+		string_result +=operators.Pop();
+
 	return string_result;
 }
 
 template<class ValType>
-ResType Postfix<ValType>::Calculator(char* str, map<char, ResType> priority)
-{
-	if(str == "")
+ResType Postfix<ValType>::Calculator(string str)
+{ 
+	if (str == "")
+		throw ("Error : The string is empty");
+
+	ResType LeftOperand;
+	ResType RightOperand;
+	char elem;
+	Stack<ResType> Result;
+	ResType res;
+
+	map<char, ResType> value;
+
+		if (str[str.length() - 1] == '=')
+			value[str[0]] = 0;
+
+	for (int i = 0; i < str.length(); i++)
+	{
+		elem = str[i];
+
+		if(IsArgument(elem))
+		{
+			if (!value.count(elem))
+			{
+				cout << "Enter the value of element :" << endl ;
+				cout << elem << " = " ;
+				cin >> value[elem] ;
+			}
+				Result.Push(value[elem]);
+				continue;
+		}
+		else
+		{
+			RightOperand = Result.Pop();
+			LeftOperand = Result.Pop();
+			switch (elem)
+			{
+				case '+':
+					Result.Push(LeftOperand + RightOperand);
+					break;
+				case '-':
+					Result.Push(LeftOperand - RightOperand);
+					break;
+				case '*':
+					Result.Push(LeftOperand * RightOperand);
+					break;
+				case '/':
+					Result.Push(LeftOperand / RightOperand);
+					break;
+			}
+		}
+	}
+	
+	res = Result.Pop();
+		
+	if(!Result.IsEmpty())
+		throw 
+		exception ("Error : Incorrect expression.");
+
+	/*if(str == "")
 		throw
 		exception ("String is empty");
 
 	Stack<ResType> result;
 	ResType LeftOperand;
 	ResType RightOperand;
-	char value;
+	char elem;
+
+	map<char, ResType> value;
 	
 	for (int i = 0; i < str.length(); i++)
 	{
-		value = str[i];
+		elem = str[i];
 
 		if (str[str.length() - 1] == '=')
-			priority[str[0]] = 0;
-		if (IsArgument(value))
+			value[str[0]] = 0;
+		if (IsArgument(elem))
 		{
-			if(!priority.count(value))
+			if(!value.count(elem))
 			{
-				cout << '\t' << value << " = " << endl ;
-				cin >> priority[values];
+				cout <<  elem << " = " ;
+				cin >> value[elem];
 			}
-			result.Push(priority[value]);
+			result.Push(value[elem]);
+			continue;
 		}
-
-		if (resut.IsEmpty())
-			throw
-			exception ("Error");
-
-		RightOperand = resalt.Pop();
-		if((result.IsEmpty) && (value == '-'))
-		{
-			resalt.Push(-RightOperand);
-		}
-	
-		if (resut.IsEmpty())
+		if (result.IsEmpty())
 			throw
 			exception ("Error");
 
 		LeftOperand = result.Pop();
-		switch (value) 
+		if((result.IsEmpty()) && (elem == '-'))
+		{
+			result.Push(-RightOperand);
+		//}
+	
+		if (result.IsEmpty())
+			throw
+			exception ("Error1");
+
+		LeftOperand = result.Pop();
+		switch (elem) 
 		{
 		case '+':
 			result.Push(LeftOperand + RightOperand);
@@ -197,6 +264,6 @@ ResType Postfix<ValType>::Calculator(char* str, map<char, ResType> priority)
 	ResType res = result.Pop();
 	if(!result.IsEmpty())
 		throw 
-		exception ("Error");
+		exception ("Error2");*/
 	return res;
 }

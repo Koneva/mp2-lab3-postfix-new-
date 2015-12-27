@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cstdlib>
 
+using namespace std;
+
 template<class ValType>
 class Node
 {
@@ -18,7 +20,7 @@ private:
 	Node<ValType>* First;
 public:
 	List();
-	List(const List<ValType>*);
+	List(const List<ValType>&);
 	~List();
 
 	void PushStart(ValType key);
@@ -29,6 +31,9 @@ public:
 	Node<ValType>* GetFirst()const;
 	void Remove(ValType key);
 	void Print()const;
+
+	int operator==(const List list)const;
+    int operator!=(const List list)const;
 };
 
 //конструктор
@@ -40,14 +45,14 @@ List<ValType>::List()
 
 //конструктор копирования
 template<class ValType>
-List<ValType>::List(const List<ValType> *list)
+List<ValType>::List(const List<ValType> &list)
 {
 	First = 0;
 	Node<ValType>* first = list.First;
 	while (first != 0)
 	{
 		PushEnd(first -> key);
-		first = first -> next;
+		first = first -> Next;
 	}
 }
 
@@ -145,7 +150,19 @@ void List<ValType>::Remove(ValType key)
 {
 	if(First == 0)
 		throw ("List is empty");
-	First = First -> Next;
+
+    Node<ValType>* node =  Search(key);
+
+	if (First -> key == key) {
+        First = First -> Next;
+        return;
+    }
+
+    Node<ValType>* first = First;
+    while (first -> Next != node)
+        first = first -> Next;
+    first -> Next = node-> Next;
+    delete node;
 }
 
 template<class ValType>
@@ -158,4 +175,28 @@ void List<ValType>::Print()const
 		first = first -> Next;
 	}
 	cout << endl << endl ;
+}
+
+template <class ValType>
+int List<ValType>::operator==(const List list)const
+{
+    Node<ValType>* first1 = First;
+    Node<ValType>* first2 = list.First;
+    while ((first1 != 0) && (first2 != 0))
+	{
+        if(first1 -> key != first2 -> key)
+            return 0;
+        first1 = first1 -> Next;
+        first2 = first2 -> Next;
+    }
+
+    if (first1 != first2)
+        return 0;
+    return 1;
+}
+
+template <class ValType>
+int List<ValType>::operator!=(const List list)const
+{
+    return !(*this == list);
 }
