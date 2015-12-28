@@ -99,7 +99,11 @@ string Postfix<ValType>::PostfixString(string str)
 				if (value == ')')
 				{
 					while ((!operators.IsEmpty()) && (operators.GetValue() != '('))
-						arguments.Push(operators.Pop());					
+						arguments.Push(operators.Pop());
+					if (operators.IsEmpty())
+					{
+						throw exception("Error : Incorrect.");
+					}
 					operators.Pop();
 				}
 				else
@@ -142,6 +146,15 @@ string Postfix<ValType>::PostfixString(string str)
 	while (!operators.IsEmpty())
 		string_result +=operators.Pop();
 
+	
+	for(int i = 0; i < string_result.length(); i++)
+	{
+		value = string_result[i];
+
+		if (value == '(')
+			throw exception ("Error : Incorrect expression.");
+	}
+
 	return string_result;
 }
 
@@ -159,8 +172,10 @@ ResType Postfix<ValType>::Calculator(string str)
 
 	map<char, ResType> value;
 
-		if (str[str.length() - 1] == '=')
+	if (str[str.length() - 1] == '=')
+	{
 			value[str[0]] = 0;
+	}
 
 	for (int i = 0; i < str.length(); i++)
 	{
@@ -193,6 +208,10 @@ ResType Postfix<ValType>::Calculator(string str)
 					Result.Push(LeftOperand * RightOperand);
 					break;
 				case '/':
+					if (RightOperand == 0)
+					{
+						throw std::exception("Error : /0");
+					}
 					Result.Push(LeftOperand / RightOperand);
 					break;
 			}
@@ -202,8 +221,9 @@ ResType Postfix<ValType>::Calculator(string str)
 	res = Result.Pop();
 		
 	if(!Result.IsEmpty())
+	{
 		throw 
 		exception ("Error : Incorrect expression.");
-
+	}
 	return res;
 }
