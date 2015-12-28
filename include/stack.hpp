@@ -20,6 +20,9 @@ public:
 	ValType Pop();
 	ValType GetValue();
 	void Print() const;
+
+    int operator== (const Stack&)const;
+    int operator!= (const Stack&)const;
 };
 
 //конструктор
@@ -105,4 +108,17 @@ void Stack<ValType>::Print() const
 	Stack<ValType>* stack = new Stack<ValType>(*this);
 	while (!(stack -> IsEmpty()))
 		cout << stack -> Pop() << endl ;
+}
+
+
+template <class ValType>
+int Stack<ValType>::operator== (const Stack& stack)const
+{
+	return (*list == *(stack.list));
+}
+
+template <class KeyType>
+int Stack<KeyType>::operator!= (const Stack& stack)const
+{
+	return (*list != *(stack.list));
 }
