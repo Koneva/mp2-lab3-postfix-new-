@@ -146,7 +146,6 @@ TEST(List, pushBefore_works_properly) {
     list1 -> PushStart(4);
     list1 -> PushStart(2);
     list -> Print();
-    list1 -> Print();
     EXPECT_EQ(*list1, *list);
 }
 
@@ -195,4 +194,23 @@ TEST(List, remove_END_works_properly) {
     list1 -> PushStart(5);
     list1 -> PushStart(4);
     EXPECT_EQ(*list1, *list);
+}
+
+TEST(List, compare_equal_lists_return_true) {
+    List<int>* list = new List<int>;
+    List<int>* list1 = new List<int>;
+
+    list -> PushStart(2);
+    list1 -> PushStart(2);
+    list -> PushStart(3);
+    list1 -> PushStart(3);
+    EXPECT_EQ(*list1, *list);
+}
+
+TEST(List, copied_list_is_equal_to_source_one) {
+    List<int>* list = new List<int>;
+    list -> PushStart(3);
+    list -> PushStart(4);
+    List<int>* list1 = new List<int>(*list);
+    EXPECT_EQ(*list, *list1);
 }
