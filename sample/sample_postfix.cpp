@@ -12,19 +12,17 @@ int main()
 	Postfix<char> postfix;
 
 	cout << endl << "String -> " << str << endl ;
-	string postfix_str = postfix.PostfixString(str);
-	cout << endl << "Postfix form -> " << postfix_str << endl;
-
-	ResType res;
 	try
 	{
-    res = postfix.Calculator(postfix_str);
+	string postfix_str = postfix.PostfixString(str);
+	cout << endl << "Postfix form -> " << postfix_str << endl;
+    ResType res = postfix.Calculator(postfix_str);
+    cout << "Result : " << res << endl ;
+    return 0;
 	}
     catch (const exception &e) 
 	{
         cout << e.what() << endl;
         return 1;
     }
-    cout << "Result : " << res << endl ;
-    return 0;
 }
